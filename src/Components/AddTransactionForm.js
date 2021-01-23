@@ -12,7 +12,6 @@ import {
 import TransactionContext from "../context/transactionContext";
 
 const AddTransactionForm = (userId) => {
-  console.log({ userId });
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [componentSize, setComponentSize] = useState("default");
   const [transaction, setTransaction] = useState({
@@ -21,7 +20,7 @@ const AddTransactionForm = (userId) => {
     description: "",
     paymentMode: "cash",
     amount: 0,
-    userId,
+    userId: userId.userId,
   });
   const transactionContext = useContext(TransactionContext);
 
@@ -134,6 +133,7 @@ const AddTransactionForm = (userId) => {
               </Select.Option>
               <Select.Option value={"Food"}>Food</Select.Option>
               <Select.Option value={"Clothing"}>Clothing</Select.Option>
+              <Select.Option value={"Clothing"}>Other</Select.Option>
             </Select>
           </Form.Item>
 

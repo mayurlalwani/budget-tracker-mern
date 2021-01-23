@@ -47,7 +47,6 @@ app.listen(PORT, function () {
 });
 
 financeTrackerRoutes.route("/").post(async (req, res) => {
-  console.log(req.body.userId);
   const auth = req.currentUser;
   if (auth) {
     const transactions = await Transaction.find({
@@ -60,7 +59,6 @@ financeTrackerRoutes.route("/").post(async (req, res) => {
 
 financeTrackerRoutes.route("/addTransactionDetails").post(async (req, res) => {
   const auth = req.currentUser;
-  console.log({ auth });
 
   if (auth) {
     const transaction = new Transaction(req.body);

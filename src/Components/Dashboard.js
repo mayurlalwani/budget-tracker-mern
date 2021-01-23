@@ -76,18 +76,19 @@ const Dashboard = (props) => {
   useEffect(() => {
     let expenses = [];
     let income = [];
+    let totalExpenses = 0;
     let exp =
-      transactions &&
+      transactions.length !== 0 &&
       transactions.map((transaction) => {
         return transaction.transactionType === "expense"
           ? expenses.push(transaction.amount)
           : income.push(transaction.amount);
       });
-    const reducer = (accumulator, currentValue) => accumulator + currentValue;
-    setTotalExpenses(expenses.reduce(reducer, 0));
-    setTotalIncome(income.reduce(reducer, 0));
+    totalExpenses = expenses.length !== 0 && expenses.reduce((a, b) => a + b);
+
+    // const totalExpenses = addExpenses(expenses);
     //eslint - disable - next - line;
-  }, []);
+  }, [transactions]);
 
   useEffect(() => {
     getTransactions({ userId: props.userId });
