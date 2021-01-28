@@ -3,7 +3,6 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import firebase from "firebase";
 import firebaseAuth from "./firebase/firebaseConfig";
 import Dashboard from "./Components/Dashboard";
-import TransactionState from "./context/transactionState";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -46,9 +45,7 @@ function App() {
             alt="profile picture"
             src={firebase.auth().currentUser.photoURL}
           />
-          <TransactionState>
-            <Dashboard isSignedIn={isSignedIn} userId={userId} />
-          </TransactionState>
+          <Dashboard isSignedIn={isSignedIn} userId={userId} />
         </span>
       ) : (
         <StyledFirebaseAuth
