@@ -9,7 +9,6 @@ import {
   Radio,
   Button,
 } from "antd";
-import TransactionContext from "../context/transactionContext";
 
 const AddTransactionForm = (userId) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -22,7 +21,6 @@ const AddTransactionForm = (userId) => {
     amount: 0,
     userId: userId.userId,
   });
-  const transactionContext = useContext(TransactionContext);
 
   const onFormLayoutChange = (e) => ({ size }) => {
     setComponentSize(size);
@@ -33,7 +31,6 @@ const AddTransactionForm = (userId) => {
   };
 
   const handleOk = () => {
-    transactionContext.addTransaction(transaction);
     setIsModalVisible(false);
   };
 
