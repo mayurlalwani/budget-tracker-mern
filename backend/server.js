@@ -47,14 +47,17 @@ app.listen(PORT, function () {
 });
 
 financeTrackerRoutes.route("/").post(async (req, res) => {
-  const auth = req.currentUser;
-  if (auth) {
-    const transactions = await Transaction.find({
-      userId: req.body.userId,
-    });
-    return res.json(transactions.map((transaction) => transaction.toJSON()));
+  try {
+    const auth = req.currentUser;
+    if (auth) {
+      const transactions = await Transaction.find({ userId: req.body.userId });
+      return res.status(200).json(transactions);
+    } else {
+      return res.status(403).send("Not authorized");
+    }
+  } catch (err) {
+    return res.status(403).send("Not authorized");
   }
-  return res.status(403).send("Not authorized");
 });
 
 financeTrackerRoutes.route("/addTransactionDetails").post(async (req, res) => {

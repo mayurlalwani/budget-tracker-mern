@@ -8,9 +8,15 @@ import {
   CLEAR_FILTER,
   GET_TRANSACTIONS,
   CLEAR_TRANSACTIONS,
-} from "./types";
+} from "../constants/ActionTypes";
 
-export default (state, action) => {
+const initialState = {
+  transactions: [],
+  current: null,
+  filtered: null,
+};
+
+export default function (state = initialState, action) {
   switch (action.type) {
     case GET_TRANSACTIONS:
       return {
@@ -22,7 +28,7 @@ export default (state, action) => {
     case ADD_TRANSACTION:
       return {
         ...state,
-        transactions: [...state.transactions, action.payload],
+        transactions: [action.payload],
         loading: false,
       };
     case UPDATE_CURRENT:
@@ -76,4 +82,4 @@ export default (state, action) => {
     default:
       return state;
   }
-};
+}
