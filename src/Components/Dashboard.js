@@ -2,7 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import "antd/dist/antd.css";
 import { Table, Card } from "antd";
 import AddTransactionForm from "./AddTransactionForm";
-import TransactionContext from "../context/transactionContext";
+// import TransactionContext from "../context/transactionContext";
+import {
+  getTransactionsAction,
+  addTransactionAction,
+} from "../actions/transaction-actions";
+import { connect } from "react-redux";
+
 const columns = [
   {
     title: "Category",
@@ -31,16 +37,16 @@ const columns = [
   },
 ];
 
-const Dashboard = (props) => {
-  // console.log(props.userId);
-  const { userId } = props;
+const Dashboard = ({
+  userId,
+  addTransaction,
+  getTransactions,
+  transactionsList,
+}) => {
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [totalIncome, setTotalIncome] = useState(0);
-  console.log(props.isSignedIn, props.userId);
-  const transactionContext = useContext(TransactionContext);
-  console.log({ transactionContext });
+  // const transactionContext = useContext(TransactionContext);
 
-  const { transactions, getTransactions } = transactionContext;
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(
@@ -59,40 +65,40 @@ const Dashboard = (props) => {
 
   const data = [];
 
-  transactions &&
-    transactions.map((transaction) => {
-      data.push({
-        key: transaction._id,
-        category: transaction.category,
-        date: transaction.date,
-        mode: transaction.paymentMode,
-        description: transaction.description,
-        amount: transaction.amount,
-      });
+  // transactions &&
+  //   transactions.map((transaction) => {
+  //     data.push({
+  //       key: transaction._id,
+  //       category: transaction.category,
+  //       date: transaction.date,
+  //       mode: transaction.paymentMode,
+  //       description: transaction.description,
+  //       amount: transaction.amount,
+  //     });
 
-      return data;
-    });
+  //     return data;
+  //   });
+
+  // useEffect(() => {
+  //   let expenses = [];
+  //   let income = [];
+  //   let totalExpenses = 0;
+  //   let exp =
+  //     transactions.length !== 0 &&
+  //     transactions.map((transaction) => {
+  //       return transaction.transactionType === "expense"
+  //         ? expenses.push(transaction.amount)
+  //         : income.push(transaction.amount);
+  //     });
+  //   totalExpenses = expenses.length !== 0 && expenses.reduce((a, b) => a + b);
+
+  //   // const totalExpenses = addExpenses(expenses);
+  //   //eslint - disable - next - line;
+  // }, [transactions]);
 
   useEffect(() => {
-    let expenses = [];
-    let income = [];
-    let totalExpenses = 0;
-    let exp =
-      transactions.length !== 0 &&
-      transactions.map((transaction) => {
-        return transaction.transactionType === "expense"
-          ? expenses.push(transaction.amount)
-          : income.push(transaction.amount);
-      });
-    totalExpenses = expenses.length !== 0 && expenses.reduce((a, b) => a + b);
-
-    // const totalExpenses = addExpenses(expenses);
-    //eslint - disable - next - line;
-  }, [transactions]);
-
-  useEffect(() => {
-    getTransactions({ userId: props.userId });
-  }, [props.userId]);
+    getTransactions({ userId: userId });
+  }, []);
 
   return (
     <>
@@ -115,15 +121,30 @@ const Dashboard = (props) => {
         </Card>
       </div>
 
-      <AddTransactionForm userId={userId} />
+      <AddTransactionForm
+        userId={userId}
+        addTransaction={addTransaction}
+        userId={userId}
+      />
 
       <Table
         columns={columns}
         rowSelection={{ ...rowSelection }}
-        dataSource={data}
+        dataSource={transactionsList}
       />
     </>
   );
 };
 
-export default Dashboard;
+const mapStateToProps = (state) => ({
+  ...state.Dashboard,
+  transactionsList: state.Transactions.transactions[0],
+  userId: state.User.userId,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getTransactions: (payload) => dispatch(getTransactionsAction(payload)),
+  addTransaction: (payload) => dispatch(addTransactionAction(payload)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
