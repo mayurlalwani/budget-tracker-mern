@@ -14,12 +14,13 @@ const createToken = async () => {
   return payloadHeader;
 };
 
-export const getTransactionListApi = async (userId) => {
+export const getTransactionListApi = async (data) => {
   const header = await createToken();
+
   try {
     const res = await axios.post(
       "http://localhost:4000/api/transactions",
-      userId,
+      data,
       header
     );
     return res;

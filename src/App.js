@@ -3,8 +3,10 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import firebase from "firebase";
 import firebaseAuth from "./firebase/firebaseConfig";
 import Dashboard from "./Components/Dashboard";
+import { getUserDetailsAction } from "./actions/userAction";
+import { connect } from "react-redux";
 
-function App() {
+function App({ getUserDetails }) {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userId, setUserId] = useState("");
   firebaseAuth.auth().onAuthStateChanged((user) => {
@@ -30,6 +32,7 @@ function App() {
       setIsSignedIn(!!user);
       if (user.uid !== "") {
         setUserId(user.uid);
+        getUserDetails(user.uid);
       }
     });
   }, []);
@@ -57,4 +60,13 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  ...state.Dashboard,
+  userId: state.User.userId,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getUserDetails: (payload) => dispatch(getUserDetailsAction(payload)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
