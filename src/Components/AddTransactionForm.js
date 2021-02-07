@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   Form,
   Input,
@@ -9,21 +9,18 @@ import {
   Radio,
   Button,
 } from "antd";
-import TransactionContext from "../context/transactionContext";
 
-const AddTransactionForm = (userId) => {
+const AddTransactionForm = ({ userId, addTransaction }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [componentSize, setComponentSize] = useState("default");
   const [transaction, setTransaction] = useState({
     transactionType: "expense",
     category: "",
     description: "",
-    paymentMode: "cash",
+    mode: "cash",
     amount: 0,
-    userId: userId.userId,
+    userId: userId,
   });
-  const transactionContext = useContext(TransactionContext);
-
   const onFormLayoutChange = (e) => ({ size }) => {
     setComponentSize(size);
     setTransaction({ ...transaction, [e.target.name]: e.target.value });
@@ -33,8 +30,8 @@ const AddTransactionForm = (userId) => {
   };
 
   const handleOk = () => {
-    transactionContext.addTransaction(transaction);
     setIsModalVisible(false);
+    addTransaction(transaction);
   };
 
   const handleCancel = () => {

@@ -19,7 +19,7 @@ let TransactionSchema = new Schema({
   amount: {
     type: Number,
   },
-  paymentMode: {
+  mode: {
     type: String,
   },
 });
